@@ -1,0 +1,10 @@
+Albany,42.67,73.75
+Albuquerque,35.08,106.65
+Amarillo,35.18,101.83
+Anchorage,61.22,149.9
+Atlanta,33.75,84.38
+Austin,30.27,97.73
+Baker,44.78,117.83
+Baltimore,39.3,76.63
+Bangor,44.8,68.78
+Birmingham,33.5,86.83

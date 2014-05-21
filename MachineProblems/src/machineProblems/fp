@@ -1,0 +1,132 @@
+    import java.io.ByteArrayInputStream;
+    import java.lang.reflect.Array;
+    import java.util.ArrayList;
+    import java.util.Arrays;
+    import java.util.Collections;
+
+    public class FloatingPoint {
+
+    double width = 0;
+    float floatingPoint = 0;
+    double doublePoint = 0;
+    int[] bitArray;
+
+    public FloatingPoint(int aWidth) {
+    if (aWidth == 32 || aWidth == 64) {
+    this.width = aWidth;
+    bitArray = new int[(int) width];
+    } else {
+    System.out.println("You must enter either 32 or 64 as a parameter");
+    }
+    }
+
+    public float getValue() {
+    return floatingPoint;
+    }
+
+    double numberToChop = 0;
+
+    int firstNumInt = 0;
+    int secondNumInt = 0;
+
+    ArrayList<Character> intList = new ArrayList<Character>();
+
+    public void setValue(double numberToChop) {
+    if (width == 32) {
+    int[] bitArray = new int[(int) width];
+    } else if (width == 64) {
+    int[] bitArray = new int[(int) width];
+    }
+
+    int placeValue = 0;
+    this.numberToChop = numberToChop;
+
+    String stringNum = numberToChop + "";
+    for (int i = 0; i < stringNum.length() - 1; i++) {
+    if (stringNum.charAt(i) == '.') {
+    placeValue = i;
+    }
+    }
+    String firstNum = "";
+    String secondNum = "";
+    for (int i = 0; i < stringNum.length(); i++) {
+    if (i < placeValue) {
+    firstNum += stringNum.charAt(i) + "";
+    } else if (i > placeValue && i < stringNum.length()) {
+    secondNum += stringNum.charAt(i) + "";
+    }
+    }
+
+    firstNumInt = Integer.parseInt(firstNum);
+    secondNumInt = Integer.parseInt(secondNum);
+
+    System.out.println(firstNumInt);
+    System.out.println(secondNumInt);
+
+    if (numberToChop < 0) {
+    firstNumInt = firstNumInt * (-1);
+    // print the first bit
+    System.out.print(1);
+    bitArray[0] = 1;
+    } else {
+    // print the first bit
+    System.out.print(0);
+    bitArray[0] = 0;
+    }
+
+    ArrayList<Integer> firstBinaryList = changeFirstToBinary(firstNumInt);
+    ArrayList<Integer> secondBinaryList = changeSecondToBinary(
+    secondNumInt, firstBinaryList);
+
+    for (int i = 1; i < firstBinaryList.size(); i++) {
+    // print the first number (the integer)
+    bitArray[i] = firstBinaryList.get(i - 1);
+    System.out.print(firstBinaryList.get(i));
+    }
+    System.out.print('.');
+    for (int i = 0; i < (secondBinaryList.size()); i++) {
+    // print the fraction
+    bitArray[i + firstBinaryList.size() - 1] = secondBinaryList.get(i);
+    System.out.print(secondBinaryList.get(i));
+    }
+    System.out.println("\n");
+    // This is a printer for the array
+    for (int i = 0; i < bitArray.length; i++) {
+    System.out.print(bitArray[i]);
+    }
+    }
+
+    public ArrayList<Integer> changeFirstToBinary(int number) {
+    ArrayList<Integer> firstByteList = new ArrayList<Integer>();
+    while (number > 0) {
+    firstByteList.add(number % 2);
+    number /= 2;
+    }
+    Collections.reverse(firstByteList);
+    return firstByteList;
+    }
+
+    public ArrayList<Integer> changeSecondToBinary(int mainNumber,
+    ArrayList<Integer> firstByteList) {
+    ArrayList<Integer> secondByteList = new ArrayList<Integer>();
+    String numString = "" + mainNumber;
+    String numZeroes = "";
+    for (int i = 0; i < numString.length(); i++) {
+    numZeroes += "0";
+    }
+
+    int howDivide = Integer.parseInt("1" + numZeroes);
+
+    for (int i = 0; i < width - firstByteList.size() && mainNumber != 0; i++) {
+    System.out.println(howDivide);
+    mainNumber *= 2;
+    if (mainNumber >= howDivide) {
+    mainNumber = mainNumber - howDivide;
+    secondByteList.add(1);
+    } else {
+    secondByteList.add(0);
+    }
+    }
+    return secondByteList;
+    }
+    }

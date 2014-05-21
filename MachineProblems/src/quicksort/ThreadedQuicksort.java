@@ -1,0 +1,91 @@
+package quicksort;
+
+import java.util.ArrayList;
+
+/**
+ * http://www.vogella.de/articles/JavaAlgorithmsQuicksort/article.html
+ * @author Eric
+ *
+ */
+
+public class ThreadedQuicksort extends Thread {
+	private ArrayList<Integer> numbers;
+	private int number;
+	private int low;
+	private int high;
+	private int i;
+	private int j;
+	private long totalSortTime;
+
+	public void sort(ArrayList<Integer> values) {
+		// Check for empty or null array
+		if (values == null || values.size() == 0){
+			return;
+		}
+		this.numbers = values;
+		number = values.size();
+		
+		long startTime = System.currentTimeMillis();
+		
+		quicksort(0, number - 1);
+		
+		long endTime = System.currentTimeMillis();
+		totalSortTime = endTime - startTime;
+	}
+
+	private void quicksort(int low, int high) {
+		int i = low, j = high;
+		// Get the pivot element from the middle of the list
+		int pivot = numbers.get(low + (high-low)/2);
+
+		// Divide into two lists
+		while (i <= j) {
+			// If the current value from the left list is smaller then the pivot
+			// element then get the next element from the left list
+			while (numbers.get(i) < pivot) {
+				i++;
+			}
+			// If the current value from the right list is larger then the pivot
+			// element then get the next element from the right list
+			while (numbers.get(j) > pivot) {
+				j--;
+			}
+
+			// If we have found a values in the left list which is larger then
+			// the pivot element and if we have found a value in the right list
+			// which is smaller then the pivot element then we exchange the
+			// values.
+			// As we are done we can increase i and j
+			if (i <= j) {
+				exchange(i, j);
+				i++;
+				j--;
+			}
+		}
+		
+		// Spawns multiple threads
+		new ThreadedQuicksort().start();
+	}
+
+	private void exchange(int i, int j) {
+		int temp = numbers.get(i);
+		numbers.set(i, j);
+		numbers.set(j, temp);
+	}
+
+	@Override
+	public void run() {
+		if(low < j)
+			quicksort(low, j);
+		if(i < high)
+			quicksort(i, high);		
+	}
+
+	/**
+	 * @return the totalSortTime
+	 */
+	public long getTotalSortTime() {
+		return totalSortTime;
+	}
+}
+
